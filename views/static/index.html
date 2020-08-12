@@ -1,0 +1,66 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>お買い物リスト</title>
+    <!-- スタイルシート -->
+    <link rel="stylesheet" type="text/css" href="/views/css/product.css">
+
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js" defer></script>
+
+    <!-- axios：HTTP通信を超簡単に行うことができるJavaScriptライブラリ -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js" defer></script>
+
+    <!-- Vueインスタンス -->
+    <script src="/views/js/vueProduct.js" defer></script>
+</head>
+<body>
+<div id="app">
+    <h1>お買い物リスト</h1>
+
+    <!-- 検索条件 -->
+    <label v-for="label in options">
+        <input type="radio" v-model="current" v-bind:value="label.value">{{ label.label }}
+    </label>
+    <p>品名：<input type="text" name='productName' v-model="productName" v-bind:class="{'alert-color': !validate }" value='' size="40" placeholder="品名を入力してください※必須"></p>
+    <p>メモ：<input type="text" name='productMemo' v-model="productMemo" value='' size="40"></p>
+
+    <!-- 追加ボタン -->
+    <button v-on:click="doAddProduct" v-bind:disabled="!isEntered">
+        追加
+    </button>
+    <hr>
+    <table>
+        <!-- テーブルヘッダー -->
+        <thead v-pre>
+        <tr>
+            <th class="index">No</th>
+            <th class="name">商品名</th>
+            <th class="memo">メモ</th>
+            <th class="state">状態</th>
+            <th class="delete">削除</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(item, index) in computedProducts">
+            <td class="index">{{ index + 1 }}</td>
+            <td class="name">{{ item.name }}</td>
+            <td class="memo">{{ item.memo }}</td>
+            <td class="state">
+                <!-- 状態変更ボタン -->
+                <button v-on:click="doChangeProductState(item)">
+                    {{ labels[item.state] }}
+                </button>
+            </td>
+            <td class="delete">
+                <!-- 削除ボタン -->
+                <button v-on:click="doDeleteProduct(item)">
+                    削除
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
